@@ -56,10 +56,14 @@ class TestTEDGenerator(unittest.TestCase):
         print("received %s" % result.distance)
 
     def test_all(self):
-        tedgen = TEDGenerator(costs=[FanoutWeightedTreeEditDistanceCost(), TreeEditDistanceCost()],
+        tedgen = TEDGenerator(costs=[FanoutWeightedTreeEditDistanceCost(),
+                                     TreeEditDistanceCost(),
+                                     SubtreeWeightedTreeEditDistanceCost(),
+                                     SubtreeHeightWeightedTreeEditDistanceCost()],
                               operation_generator=RandomOperation(delete_probability=1/3.0,
                                                                   insert_probability=1/3.0,
-                                                                  edit_probability=1/3.0))
+                                                                  edit_probability=1/3.0),
+                              probability=.5)
         prototype = Prototype()
         root = prototype.add_node("root", pid=1, ppid=0)
         one = root.add_node("test1", pid=2, ppid=1)
