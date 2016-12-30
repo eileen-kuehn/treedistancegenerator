@@ -11,7 +11,6 @@ class TEDGenerator(object):
         self._operation_generator = operation_generator
 
     def generate(self, tree):
-        # FIXME: vllt. umwandlung des sets in eine Liste?
         result_tree = type(tree)()
         node_mapping = {}
         operation_mapping = {}
