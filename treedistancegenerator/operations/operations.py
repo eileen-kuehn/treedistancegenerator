@@ -1,5 +1,3 @@
-import copy
-
 NO_OPERATION = 0
 INSERT_OPERATION = 1
 DELETE_OPERATION = 2
@@ -62,7 +60,7 @@ class InsertTreeEditOperation(TreeEditOperation):
             pass
         inserted_node = current_tree_node.dao()
         del inserted_node["node_id"]
-        inserted_node["name"] = "inserted"
+        inserted_node["name"] = "%s_inserted" % inserted_node.get("name", "")
         inserted_tree_node = current_tree_node.add_node(**inserted_node)
         inserted_tree_node.pid += 1
         return [current_tree_node, inserted_tree_node]
@@ -83,7 +81,7 @@ class EditTreeEditOperation(TreeEditOperation):
     def __call__(self, node, mapping_reference=None, tree_reference=None):
         current_node = node.dao()
         del current_node["node_id"]
-        current_node["name"] = "edited"
+        current_node["name"] = "%s_edited" % current_node.get("name", "")
         parent = self._valid_parent(node, mapping_reference)
         current_tree_node = tree_reference.add_node(parent=parent, **current_node)
         try:
