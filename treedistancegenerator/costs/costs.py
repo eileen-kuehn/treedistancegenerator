@@ -1,5 +1,7 @@
 from treedistancegenerator.operations.operations import *
 
+from collections import Counter
+
 
 class EditDistanceCost(object):
     def __call__(self, node, operations, last_operation):
@@ -19,11 +21,9 @@ class FanoutWeightedTreeEditDistanceCost(EditDistanceCost):
         if MOVE_OPERATION in operations or MOVE_OPERATION == last_operation:
             return NotImplemented
         if NO_OPERATION != last_operation:
-            # FIXME: what if we have delete and insert nested?
-            # FIXME: or is this already correct?
-            return 1
+            cost += 1
         try:
-            if DELETE_OPERATION == operations[-1] or INSERT_OPERATION == operations[-1] or EDIT_OPERATION == operations[-1]:
+            if operations[-1] != NO_OPERATION:
                 cost += 1
         except IndexError:
             pass
@@ -37,8 +37,9 @@ class SubtreeWeightedTreeEditDistanceCost(EditDistanceCost):
             return NotImplemented
         if NO_OPERATION != last_operation:
             return 1
-        if DELETE_OPERATION in operations or INSERT_OPERATION in operations or EDIT_OPERATION in operations:
-            cost += 1
+        operation_counts = Counter(operations)
+        cost += operation_counts.get(DELETE_OPERATION, 0)
+        cost += operation_counts.get(INSERT_OPERATION, 0)
         return cost
 
 
@@ -48,7 +49,7 @@ class SubtreeHeightWeightedTreeEditDistanceCost(EditDistanceCost):
         if MOVE_OPERATION in operations or MOVE_OPERATION == last_operation:
             return NotImplemented
         if NO_OPERATION != last_operation:
-            return 1
+            cost += 1
         for index, operation in enumerate(operations):
             if operation != NO_OPERATION:
                 cost += 1 / float(2**(len(operations) - index))
