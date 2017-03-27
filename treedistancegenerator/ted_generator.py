@@ -5,17 +5,19 @@ from costs.costs import TreeEditDistanceCost
 
 
 class TEDGenerator(object):
-    def __init__(self, costs, operation_generator, probability=.5):
+    def __init__(self, costs, operation_generator, probability=.5, seed=None):
         self._costs = costs or [TreeEditDistanceCost()]
         self._probability = probability
         self._operation_generator = operation_generator
+        if seed is not None:
+            random.seed(seed)
 
     def generate(self, tree):
         result_tree = type(tree)()
         node_mapping = {}
         operation_mapping = {}
         distances = {cost: 0 for cost in self._costs}
-        for node in tree:
+        for node in tree.node_iter():  # currently only defined on nodes, not attributes
             value = random.random()
             operation = self._operation_generator.no_operation
             if value < self._probability:
