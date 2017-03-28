@@ -92,17 +92,17 @@ class TestCosts(unittest.TestCase):
         deletion_cost = 0
         for operations, last_operation in self.deletion_tree:
             deletion_cost += sted_cost(None, operations, last_operation)
-        self.assertEqual(12, deletion_cost)
+        self.assertEqual(10, deletion_cost)
 
         insertion_deletion_cost = 0
         for operations, last_operation in self.insertion_deletion_tree:
             insertion_deletion_cost += sted_cost(None, operations, last_operation)
-        self.assertEqual(11, insertion_deletion_cost)
+        self.assertEqual(9, insertion_deletion_cost)
 
         insertion_insertion_cost = 0
         for operations, last_operation in self.insertion_insertion_tree:
             insertion_insertion_cost += sted_cost(None, operations, last_operation)
-        self.assertEqual(12, insertion_insertion_cost)
+        self.assertEqual(10, insertion_insertion_cost)
 
     def test_weignted_sted(self):
         wsted_cost = SubtreeHeightWeightedTreeEditDistanceCost()
