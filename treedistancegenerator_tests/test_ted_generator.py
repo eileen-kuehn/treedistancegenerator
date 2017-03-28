@@ -8,51 +8,45 @@ from assess.prototypes.simpleprototypes import Prototype
 
 
 class TestTEDGenerator(unittest.TestCase):
+    def setUp(self):
+        prototype = Prototype()
+        root = prototype.add_node("root", pid=1, ppid=0)
+        one = root.add_node("test1", pid=2, ppid=1)
+        root.add_node("test2", pid=3, ppid=1)
+        root.add_node("test3", pid=4, ppid=1)
+        one.add_node("test1.1", pid=5, ppid=2)
+        one.add_node("test1.2", pid=6, ppid=2)
+        one.add_node("test1.3", pid=7, ppid=2)
+        one.add_node("test1.4", pid=8, ppid=2)
+        self.prototype = prototype
+
     def test_creation(self):
         tedgen = TEDGenerator(costs=[TreeEditDistanceCost()],
                               operation_generator=RandomOperation(delete_probability=1))
         self.assertIsNotNone(tedgen)
 
+    def test_move(self):
+        tedgen = TEDGenerator(costs=[],
+                              operation_generator=RandomOperation(move_probability=1))
+        result = tedgen.generate(tree=self.prototype)
+        print(result)
+
     def test_deletion(self):
         tedgen = TEDGenerator(costs=[FanoutWeightedTreeEditDistanceCost(), TreeEditDistanceCost()],
                               operation_generator=RandomOperation(delete_probability=1))
-        prototype = Prototype()
-        root = prototype.add_node("root", pid=1, ppid=0)
-        one = root.add_node("test1", pid=2, ppid=1)
-        root.add_node("test2", pid=3, ppid=1)
-        root.add_node("test3", pid=4, ppid=1)
-        one.add_node("test1.1", pid=5, ppid=2)
-        one.add_node("test1.2", pid=6, ppid=2)
-        one.add_node("test1.3", pid=7, ppid=2)
-        result = tedgen.generate(tree=prototype)
+        result = tedgen.generate(tree=self.prototype)
         print("received %s" % result.distance)
 
     def test_insertion(self):
         tedgen = TEDGenerator(costs=[FanoutWeightedTreeEditDistanceCost(), TreeEditDistanceCost()],
                               operation_generator=RandomOperation(insert_probability=1))
-        prototype = Prototype()
-        root = prototype.add_node("root", pid=1, ppid=0)
-        one = root.add_node("test1", pid=2, ppid=1)
-        root.add_node("test2", pid=3, ppid=1)
-        root.add_node("test3", pid=4, ppid=1)
-        one.add_node("test1.1", pid=5, ppid=2)
-        one.add_node("test1.2", pid=6, ppid=2)
-        one.add_node("test1.3", pid=7, ppid=2)
-        result = tedgen.generate(tree=prototype)
+        result = tedgen.generate(tree=self.prototype)
         print("received %s" % result.distance)
 
     def test_edit(self):
         tedgen = TEDGenerator(costs=[FanoutWeightedTreeEditDistanceCost(), TreeEditDistanceCost()],
                               operation_generator=RandomOperation(edit_probability=1))
-        prototype = Prototype()
-        root = prototype.add_node("root", pid=1, ppid=0)
-        one = root.add_node("test1", pid=2, ppid=1)
-        root.add_node("test2", pid=3, ppid=1)
-        root.add_node("test3", pid=4, ppid=1)
-        one.add_node("test1.1", pid=5, ppid=2)
-        one.add_node("test1.2", pid=6, ppid=2)
-        one.add_node("test1.3", pid=7, ppid=2)
-        result = tedgen.generate(tree=prototype)
+        result = tedgen.generate(tree=self.prototype)
         print("received %s" % result.distance)
 
     def test_all(self):
@@ -60,9 +54,10 @@ class TestTEDGenerator(unittest.TestCase):
                                      TreeEditDistanceCost(),
                                      SubtreeWeightedTreeEditDistanceCost(),
                                      SubtreeHeightWeightedTreeEditDistanceCost()],
-                              operation_generator=RandomOperation(delete_probability=1/3.0,
-                                                                  insert_probability=1/3.0,
-                                                                  edit_probability=1/3.0),
+                              operation_generator=RandomOperation(delete_probability=0.25,
+                                                                  insert_probability=0.25,
+                                                                  edit_probability=0.25,
+                                                                  move_probability=0),
                               probability=.5)
         prototype = Prototype()
         root = prototype.add_node("root", pid=1, ppid=0)
