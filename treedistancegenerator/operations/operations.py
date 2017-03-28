@@ -96,4 +96,12 @@ class MoveTreeEditOperation(TreeEditOperation):
         return MOVE_OPERATION
 
     def __call__(self, node, mapping_reference=None, tree_reference=None):
-        return NotImplemented
+        current_node = node.dao()
+        del current_node["node_id"]
+        parent = self._valid_parent(node, mapping_reference)
+        current_tree_node = tree_reference.add_node(parent=parent, **current_node)
+        try:
+            current_tree_node.ppid = parent.pid
+        except AttributeError:
+            pass
+        return [current_tree_node]
