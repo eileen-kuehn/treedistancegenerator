@@ -36,10 +36,13 @@ class SubtreeWeightedTreeEditDistanceCost(EditDistanceCost):
         if MOVE_OPERATION in operations or MOVE_OPERATION == last_operation:
             return NotImplemented
         if NO_OPERATION != last_operation:
-            return 1
-        operation_counts = Counter(operations)
-        cost += operation_counts.get(DELETE_OPERATION, 0)
-        cost += operation_counts.get(INSERT_OPERATION, 0)
+            cost += 1
+        operations = set(operations)
+        minimum_length = 1
+        if NO_OPERATION in operations:
+            minimum_length += 1
+        if len(operations) >= minimum_length:
+            cost += 1
         return cost
 
 
