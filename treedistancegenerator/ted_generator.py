@@ -5,6 +5,12 @@ from costs.costs import TreeEditDistanceCost
 
 
 class TEDGenerator(object):
+    """
+    TreeDistanceGenerator allows to edit a given tree for different types of edit operations.
+    Therefore it relies on building a mapping between the nodes of the given tree and the nodes
+    of the created tree. In addition, it holds a list for each node that contains information
+    on all operations that were performed in its ancestry.
+    """
     def __init__(self, costs, operation_generator, probability=.5, seed=None):
         self._costs = costs or [TreeEditDistanceCost()]
         self._probability = probability
