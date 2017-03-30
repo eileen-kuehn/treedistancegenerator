@@ -23,10 +23,10 @@ class RandomOperation(object):
                 self._probability_list.append((probability, operation,))
         if self._probability_list[-1][0] > 1:
             logging.getLogger(self.__class__.__name__).warning(
-                "sum of operations is more than 100% (%s)", self._probability_list[-1][0])
+                "sum of operations is more than 100%% (%s)", self._probability_list[-1][0])
         elif self._probability_list[-1][0] < 1:
             logging.getLogger(self.__class__.__name__).warning(
-                "sum of operations is less than 100% (%s)", self._probability_list[-1][0])
+                "sum of operations is less than 100%% (%s)", self._probability_list[-1][0])
 
     def __call__(self):
         current_value = random.random()
