@@ -18,8 +18,8 @@ class TreeEditDistanceCost(EditDistanceCost):
 class FanoutWeightedTreeEditDistanceCost(EditDistanceCost):
     def __call__(self, node, operations, last_operation):
         cost = 0
-        if MOVE_OPERATION in operations or MOVE_OPERATION == last_operation:
-            return NotImplemented
+        # if MOVE_OPERATION in operations or MOVE_OPERATION == last_operation:
+        #     return NotImplemented
         if NO_OPERATION != last_operation:
             cost += 1
         try:
@@ -33,8 +33,8 @@ class FanoutWeightedTreeEditDistanceCost(EditDistanceCost):
 class SubtreeWeightedTreeEditDistanceCost(EditDistanceCost):
     def __call__(self, node, operations, last_operation):
         cost = 0
-        if MOVE_OPERATION in operations or MOVE_OPERATION == last_operation:
-            return NotImplemented
+        # if MOVE_OPERATION in operations or MOVE_OPERATION == last_operation:
+        #     return NotImplemented
         if NO_OPERATION != last_operation:
             cost += 1
         operations = set(operations)
@@ -49,8 +49,8 @@ class SubtreeWeightedTreeEditDistanceCost(EditDistanceCost):
 class SubtreeHeightWeightedTreeEditDistanceCost(EditDistanceCost):
     def __call__(self, node, operations, last_operation):
         cost = 0
-        if MOVE_OPERATION in operations or MOVE_OPERATION == last_operation:
-            return NotImplemented
+        # if MOVE_OPERATION in operations or MOVE_OPERATION == last_operation:
+        #     return NotImplemented
         if NO_OPERATION != last_operation:
             cost += 1
         for index, operation in enumerate(operations):
