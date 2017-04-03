@@ -41,7 +41,7 @@ class TEDGenerator(object):
                             # at end of tree, so just insert the last node
                             operation = self._operation_generator.no_operation
                         else:
-                            if next_node.parent() == node:
+                            if next_node.parent() == node or node.parent() != next_node.parent():
                                 # skipping to next loop so that node can also be handled
                                 self._handle_node(node=node,
                                                   operation=self._operation_generator.no_operation,
