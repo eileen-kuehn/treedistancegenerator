@@ -133,6 +133,28 @@ class TestCosts(unittest.TestCase):
             move_cost += sted_cost(None, operations, last_operation)
         self.assertEqual(4, move_cost)
 
+    def test_sted_with_move(self):
+        sted_cost = SubtreeWeightedTreeEditDistanceCostWithMove()
+        deletion_cost = 0
+        for operations, last_operation in self.deletion_tree:
+            deletion_cost += sted_cost(None, operations, last_operation)
+        self.assertEqual(10, deletion_cost)
+
+        insertion_deletion_cost = 0
+        for operations, last_operation in self.insertion_deletion_tree:
+            insertion_deletion_cost += sted_cost(None, operations, last_operation)
+        self.assertEqual(9, insertion_deletion_cost)
+
+        insertion_insertion_cost = 0
+        for operations, last_operation in self.insertion_insertion_tree:
+            insertion_insertion_cost += sted_cost(None, operations, last_operation)
+        self.assertEqual(10, insertion_insertion_cost)
+
+        move_cost = 0
+        for operations, last_operation in self.move_tree:
+            move_cost += sted_cost(None, operations, last_operation)
+        self.assertEqual(0, move_cost)
+
     def test_weignted_sted(self):
         wsted_cost = SubtreeHeightWeightedTreeEditDistanceCost()
         deletion_cost = 0
