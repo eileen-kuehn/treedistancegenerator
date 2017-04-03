@@ -66,6 +66,22 @@ class SubtreeWeightedTreeEditDistanceCost(EditDistanceCost):
         return cost
 
 
+class SubtreeWeightedTreeEditDistanceCostWithMove(EditDistanceCost):
+    def __call__(self, node, operations, last_operation):
+        cost = 0
+        if NO_OPERATION != last_operation and MOVE_OPERATION != last_operation:
+            cost += 1
+        operations = set(operations)
+        minimum_length = 1
+        if NO_OPERATION in operations:
+            minimum_length += 1
+        if MOVE_OPERATION in operations:
+            minimum_length += 1
+        if len(operations) >= minimum_length:
+            cost += 1
+        return cost
+
+
 class SubtreeHeightWeightedTreeEditDistanceCost(EditDistanceCost):
     def __call__(self, node, operations, last_operation):
         cost = 0
