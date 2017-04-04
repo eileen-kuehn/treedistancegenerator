@@ -11,10 +11,12 @@ class TEDGenerator(object):
     of the created tree. In addition, it holds a list for each node that contains information
     on all operations that were performed in its ancestry.
     """
-    def __init__(self, costs, operation_generator, probability=.5, seed=None):
+    def __init__(self, costs, operation_generator, probability=.5, seed=None,
+                 skip_node=lambda node: False):
         self._costs = costs or [TreeEditDistanceCost()]
         self._probability = probability
         self._operation_generator = operation_generator
+        self._skip_node = skip_node
         if seed is not None:
             random.seed(seed)
 
@@ -29,31 +31,32 @@ class TEDGenerator(object):
             while node:
                 value = random.random()
                 operation = self._operation_generator.no_operation
-                if value < self._probability:
-                    operation = self._operation_generator()
-                    if operation.type() == DELETE_OPERATION and node.parent() is None:
-                        # perform NoOperation as we don't have a parent to map nodes to after deletion
-                        operation = self._operation_generator.no_operation
-                    elif operation.type() == MOVE_OPERATION:
-                        try:
-                            next_node = next(node_generator)
-                        except StopIteration:
-                            # at end of tree, so just insert the last node
+                if not self._skip_node(node):
+                    if value < self._probability:
+                        operation = self._operation_generator()
+                        if operation.type() == DELETE_OPERATION and node.parent() is None:
+                            # perform NoOperation as we don't have a parent to map nodes to after deletion
                             operation = self._operation_generator.no_operation
-                        else:
-                            if next_node.parent() == node or node.parent() != next_node.parent():
-                                # skipping to next loop so that node can also be handled
-                                self._handle_node(node=node,
-                                                  operation=self._operation_generator.no_operation,
-                                                  node_mapping=node_mapping,
-                                                  operation_mapping=operation_mapping,
-                                                  result_tree=result_tree, distances=distances)
-                                node = next_node
-                                continue
-                            self._handle_node(
-                                node=next_node, operation=operation, node_mapping=node_mapping,
-                                operation_mapping=operation_mapping, result_tree=result_tree,
-                                distances=distances)
+                        elif operation.type() == MOVE_OPERATION:
+                            try:
+                                next_node = next(node_generator)
+                            except StopIteration:
+                                # at end of tree, so just insert the last node
+                                operation = self._operation_generator.no_operation
+                            else:
+                                if next_node.parent() == node or node.parent() != next_node.parent():
+                                    # skipping to next loop so that node can also be handled
+                                    self._handle_node(node=node,
+                                                      operation=self._operation_generator.no_operation,
+                                                      node_mapping=node_mapping,
+                                                      operation_mapping=operation_mapping,
+                                                      result_tree=result_tree, distances=distances)
+                                    node = next_node
+                                    continue
+                                self._handle_node(
+                                    node=next_node, operation=operation, node_mapping=node_mapping,
+                                    operation_mapping=operation_mapping, result_tree=result_tree,
+                                    distances=distances)
                 self._handle_node(node=node, operation=operation, node_mapping=node_mapping,
                                   operation_mapping=operation_mapping, result_tree=result_tree,
                                   distances=distances)
