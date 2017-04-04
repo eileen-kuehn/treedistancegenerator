@@ -9,3 +9,9 @@ def skip_inner_node(node):
 
 def skip_no_node(node):
     return False
+
+def skip_all_but_attribute_nodes(node):
+    try:
+        return not node.traffic
+    except AttributeError:
+        return True
