@@ -1,7 +1,5 @@
 from treedistancegenerator.operations.operations import *
 
-from collections import Counter
-
 
 class EditDistanceCost(object):
     def __call__(self, node, operations, last_operation):
