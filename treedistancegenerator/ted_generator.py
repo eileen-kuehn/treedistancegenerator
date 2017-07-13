@@ -29,9 +29,9 @@ class TEDGenerator(object):
         try:
             node = next(node_generator)
             while node:
-                value = random.random()
                 operation = self._operation_generator.no_operation
                 if not self._skip_node(node):
+                    value = random.random()
                     if value < self._probability:
                         operation = self._operation_generator()
                         if operation.type() == DELETE_OPERATION and node.parent() is None:
