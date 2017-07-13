@@ -30,9 +30,8 @@ class RandomOperation(object):
 
     def __call__(self):
         current_value = random.random()
-        last_value = 0
         for (value, operation) in self._probability_list:
-            if last_value < current_value < value:
+            if current_value < value:
                 # return last checked operation
                 return operation
         return self.no_operation
